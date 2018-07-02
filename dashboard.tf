@@ -1,4 +1,15 @@
-variable "bucket_name" {
+variable "bucket_name" {}
+
+terraform {
+  backend "s3" {
+    bucket = "liatristorage"
+    key    = "liatristorage/dashboard.tfstate"
+    region = "us-west-2"
+  }
+}
+
+provider "aws" {
+    region = "us-west-2"
 }
 
 resource "aws_s3_bucket" "b" {

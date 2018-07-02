@@ -1,6 +1,6 @@
 variable "bucket_name" {
-    default = "boom.liatr.io"
 }
+
 resource "aws_s3_bucket" "b" {
   bucket = "${var.bucket_name}"
   acl    = "public-read"
@@ -28,14 +28,13 @@ data "aws_route53_zone" "domain" {
 }
 
 resource "aws_route53_record" "dashboard_url" {
-    zone_id = "${data.aws_route53_zone.domain.zone_id}"
-    name    = "${var.bucket_name}"
-    type    = "A"
+  zone_id = "${data.aws_route53_zone.domain.zone_id}"
+  name    = "${var.bucket_name}"
+  type    = "A"
 
-    alias {
-        name                   = "boom.liatr.io"
-        zone_id                = "${aws_s3_bucket.b.hosted_zone_id}"
-        evaluate_target_health = true
-    }
-
+  alias {
+    name                   = "${aws_s3_bucket.b.website_domain}"
+    zone_id                = "${aws_s3_bucket.b.hosted_zone_id}"
+    evaluate_target_health = true
+  }
 }
